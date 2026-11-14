@@ -3,6 +3,7 @@ export { Desc, type DescProps } from './Desc';
 export { Button, type ButtonProps, type ButtonVariant } from './Button';
 export { Spinner, type SpinnerProps, type SpinnerSize, type SpinnerVariant } from './Spinner';
 export { Input, type InputProps } from './Input';
+export { PasswordInput, type PasswordInputProps } from './PasswordInput';
 export { DatePicker, type DatePickerProps } from './DatePicker';
 export { LoadingState, type LoadingStateProps } from './LoadingState';
 export { PageLoader, type PageLoaderProps, type PageLoaderSize } from './PageLoader';
