@@ -59,6 +59,7 @@ export interface BottomNavProps {
   visible?: boolean;
   linkComponent?: React.ElementType;
   onItemClick?: (item: NavItem) => void;
+  isActive?: (pathname: string, href: string) => boolean;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -68,6 +69,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   visible = true,
   linkComponent: LinkComponent = "a",
   onItemClick,
+  isActive,
 }) => {
   const [clientPath, setClientPath] = useState("");
 
@@ -91,7 +93,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       {/* Detached floating dock using full width with reduced compact height */}
       <div className="pointer-events-auto flex items-center justify-between w-full max-w-2xl h-14 p-1 rounded-full bg-white/95 backdrop-blur-xl border-2 border-primary/40 shadow-[0_8px_30px_rgba(0,0,255,0.14),0_2px_8px_rgba(0,0,0,0.06)] select-none">
         {items.map((item) => {
-          const active = isNavItemActive(effectivePath, item.href);
+          const active = isActive
+            ? isActive(effectivePath, item.href)
+            : isNavItemActive(effectivePath, item.href);
           const Icon = item.icon;
 
           return (
