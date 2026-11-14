@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
 import "../src/index.css";
+import "flag-icons/css/flag-icons.min.css";
 
 const preview: Preview = {
   parameters: {

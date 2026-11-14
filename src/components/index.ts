@@ -33,5 +33,7 @@ export {
   type OptionType,
 } from './OptionSelector';
 export { SelectIndicator, type SelectIndicatorProps } from './SelectIndicator';
+export { CountryDropdown, type CountryDropdownProps } from './CountryDropdown';
+export { PhoneInput, type PhoneInputProps, type PhoneValue } from './PhoneInput';
 
 
