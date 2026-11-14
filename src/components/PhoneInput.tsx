@@ -134,7 +134,7 @@ export function PhoneInput({
         </label>
       )}
 
-      <div className="relative">
+      <div className="relative w-full" style={{ position: "relative" }}>
         <div className={fieldStyles}>
           {/* Country selector dropdown */}
           <CountryDropdown

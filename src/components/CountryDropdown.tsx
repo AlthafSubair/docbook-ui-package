@@ -181,18 +181,24 @@ export function CountryDropdown({
       {open && (
         <div
           ref={dropdownRef}
-          className={`absolute left-0 right-0 z-50 flex overflow-hidden rounded-xl border-2 border-primary/50 bg-white shadow-[0_8px_24px_rgba(0,0,255,0.18)] ${
-            dropUp ? "bottom-full mb-2 flex-col-reverse" : "top-full mt-2 flex-col"
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            width: "100%",
+            zIndex: 50,
+            ...(dropUp
+              ? { bottom: "calc(100% + 8px)" }
+              : { top: "calc(100% + 8px)" }),
+          }}
+          className={`absolute left-0 right-0 w-full z-50 flex flex-col overflow-hidden rounded-xl border-2 border-primary/50 bg-white shadow-[0_8px_24px_rgba(0,0,255,0.18)] ${
+            dropUp ? "bottom-full mb-2" : "top-full mt-2"
           }`}
         >
           {/* Search box */}
-          <div
-            className={`flex items-center gap-2 border-border-default px-3 py-2 ${
-              dropUp ? "border-t" : "border-b"
-            }`}
-          >
+          <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2 bg-white shrink-0">
             <Search
-              className="size-4 shrink-0 text-tertiary-text"
+              className="size-4 shrink-0 text-slate-400"
               aria-hidden="true"
             />
             <input
@@ -218,7 +224,7 @@ export function CountryDropdown({
                 setActiveIndex(0);
               }}
               onKeyDown={handleSearchKeyDown}
-              className="min-w-0 flex-1 bg-transparent py-1 text-base text-secondary-text outline-none placeholder:text-tertiary-text"
+              className="min-w-0 flex-1 bg-transparent py-1 text-sm sm:text-base text-slate-700 outline-none placeholder:text-slate-400"
             />
           </div>
 
@@ -227,10 +233,10 @@ export function CountryDropdown({
             id={listboxId}
             role="listbox"
             aria-label="Countries"
-            className="max-h-[min(16rem,40vh)] overflow-y-auto overscroll-contain py-1 [-webkit-overflow-scrolling:touch]"
+            className="max-h-60 overflow-y-auto overscroll-contain py-1 [-webkit-overflow-scrolling:touch]"
           >
             {filtered.length === 0 && (
-              <li className="px-4 py-3 text-sm text-tertiary-text">
+              <li className="px-4 py-3 text-sm text-slate-400">
                 No countries found
               </li>
             )}
@@ -246,16 +252,16 @@ export function CountryDropdown({
                   aria-selected={isSelected}
                   onPointerEnter={() => setActiveIndex(index)}
                   onClick={() => handleSelect(c)}
-                  className={`flex min-h-11 cursor-pointer items-center gap-3 px-4 py-2 text-base text-secondary-text ${
-                    isActive ? "bg-primary/10" : ""
+                  className={`flex min-h-11 cursor-pointer items-center gap-3 px-4 py-2 text-sm sm:text-base text-slate-700 transition-colors ${
+                    isActive ? "bg-primary/10 text-primary" : "hover:bg-slate-50"
                   }`}
                 >
                   <span
                     className={`fi fi-${c.code.toLowerCase()} shrink-0 rounded-[3px] text-xl`}
                     aria-hidden="true"
                   />
-                  <span className="min-w-0 flex-1 truncate">{c.name}</span>
-                  <span className="shrink-0 text-sm text-tertiary-text">
+                  <span className="min-w-0 flex-1 truncate font-medium">{c.name}</span>
+                  <span className="shrink-0 text-sm text-slate-400">
                     {c.dial}
                   </span>
                   {isSelected && (
