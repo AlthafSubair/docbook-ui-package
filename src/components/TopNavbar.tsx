@@ -131,16 +131,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 <LinkComponent
                   key={item.id}
                   href={item.href}
-                  className={`flex items-center gap-2 text-sm transition-colors py-1 group ${
+                  className={`flex items-center gap-2 text-sm py-1.5 px-3.5 rounded-full transition-all duration-200 group ${
                     active
-                      ? "text-primary font-bold"
-                      : "text-slate-600 hover:text-primary font-medium"
+                      ? "bg-[image:var(--button-gradient)] text-white shadow-xs shadow-primary/20 font-semibold"
+                      : "text-slate-600 hover:text-primary hover:bg-slate-100/80 font-medium"
                   }`}
                 >
                   <Icon
                     className={`size-4.5 transition-colors ${
                       active
-                        ? "stroke-[2.4] text-primary"
+                        ? "stroke-[2.4] text-white"
                         : "stroke-2 text-slate-500 group-hover:text-primary"
                     }`}
                   />
@@ -150,7 +150,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     <span
                       className={`min-w-[18px] h-4.5 px-1 rounded-full text-[11px] font-bold flex items-center justify-center transition-colors ${
                         active
-                          ? "bg-primary text-white"
+                          ? "bg-white text-primary"
                           : "bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary"
                       }`}
                     >
