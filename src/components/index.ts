@@ -16,8 +16,14 @@ export {
   navItems,
   isNavItemActive,
   type BottomNavProps,
+  type BottomNavComponent,
   type NavItem,
+  type NavSubItem,
 } from './BottomNav';
+export {
+  BottomNavPopover,
+  type BottomNavPopoverProps,
+} from './BottomNavPopover';
 export {
   TopNavbar,
   defaultPopularLocations,
