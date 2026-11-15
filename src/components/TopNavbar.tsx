@@ -17,14 +17,18 @@ export interface TopNavbarProps {
   brandHref?: string;
   brandNamePrefix?: string;
   brandNameSuffix?: string;
+  brandSubtitle?: string;
   brandTitle?: string;
   brandIcon?: React.ComponentType<{ className?: string }>;
   navItems?: NavItem[];
   currentPath?: string;
   showNavItems?: boolean;
+  isActive?: (path: string, href: string) => boolean;
   locations?: string[];
   selectedLocation?: string;
   onLocationChange?: (location: string) => void;
+  showLocationSelector?: boolean;
+  rightContent?: React.ReactNode;
   linkComponent?: React.ElementType;
 }
 
@@ -33,14 +37,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   brandHref = "/clinics",
   brandNamePrefix = "Doc",
   brandNameSuffix = "Book",
+  brandSubtitle,
   brandTitle = "DocBook Home",
   brandIcon: BrandIcon = Stethoscope,
   navItems = defaultNavItems,
   currentPath,
   showNavItems = true,
+  isActive,
   locations = defaultPopularLocations,
   selectedLocation,
   onLocationChange,
+  showLocationSelector = true,
+  rightContent,
   linkComponent: LinkComponent = "a",
 }) => {
   const [clientPath, setClientPath] = useState("");
@@ -101,7 +109,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {/* Left Side: Branding */}
         <LinkComponent
           href={brandHref}
-          className="flex items-center gap-2 group select-none shrink-0"
+          to={brandHref}
+          className="flex items-center gap-2.5 group select-none shrink-0"
           title={brandTitle}
         >
           <div className="size-8 rounded-xl bg-[image:var(--button-gradient)] flex items-center justify-center text-white shadow-xs shadow-primary/20 group-hover:scale-105 transition-transform">
@@ -114,23 +123,31 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {brandNameSuffix}
               </span>
             </span>
+            {brandSubtitle && (
+              <span className="text-[10px] font-bold text-tertiary-text tracking-wider uppercase mt-0.5">
+                {brandSubtitle}
+              </span>
+            )}
           </div>
         </LinkComponent>
 
-        {/* Center: Desktop Navigation Links in between brand and location */}
+        {/* Center: Desktop Navigation Links in between brand and right actions */}
         {showNavItems && (
           <nav
             aria-label="Desktop navigation"
             className="hidden lg:flex flex-1 items-center justify-center gap-6 xl:gap-8"
           >
             {navItems.map((item) => {
-              const active = isNavItemActive(effectivePath, item.href);
+              const active = isActive
+                ? isActive(effectivePath, item.href)
+                : isNavItemActive(effectivePath, item.href);
               const Icon = item.icon;
 
               return (
                 <LinkComponent
                   key={item.id}
                   href={item.href}
+                  to={item.href}
                   className={`flex items-center gap-2 text-sm py-1.5 px-3.5 rounded-full transition-all duration-200 group ${
                     active
                       ? "bg-[image:var(--button-gradient)] text-white shadow-xs shadow-primary/20 font-semibold"
@@ -163,54 +180,60 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </nav>
         )}
 
-        {/* Right Side: Location Selector */}
-        <div className="relative shrink-0" ref={dropdownRef}>
-          <button
-            type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-expanded={isOpen}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group shadow-2xs"
-          >
-            <MapPin className="size-3.5 text-primary shrink-0 transition-transform group-hover:scale-110" />
-            <span className="text-xs font-semibold text-slate-800 max-w-[140px] sm:max-w-none truncate">
-              {activeLocation}
-            </span>
-            <ChevronDown
-              className={`size-3 text-slate-400 group-hover:text-primary transition-transform duration-200 ${
-                isOpen ? "rotate-180 text-primary" : ""
-              }`}
-            />
-          </button>
+        {/* Right Side: Custom Right Content OR Default Location Selector */}
+        {rightContent ? (
+          rightContent
+        ) : (
+          showLocationSelector && (
+            <div className="relative shrink-0" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsOpen((prev) => !prev)}
+                aria-expanded={isOpen}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group shadow-2xs"
+              >
+                <MapPin className="size-3.5 text-primary shrink-0 transition-transform group-hover:scale-110" />
+                <span className="text-xs font-semibold text-slate-800 max-w-[140px] sm:max-w-none truncate">
+                  {activeLocation}
+                </span>
+                <ChevronDown
+                  className={`size-3 text-slate-400 group-hover:text-primary transition-transform duration-200 ${
+                    isOpen ? "rotate-180 text-primary" : ""
+                  }`}
+                />
+              </button>
 
-          {/* Location Dropdown Popover */}
-          {isOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-slate-200 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                Select Your Location
-              </div>
-              <div className="flex flex-col gap-0.5">
-                {locations.map((loc) => {
-                  const isSelected = loc === activeLocation;
-                  return (
-                    <button
-                      key={loc}
-                      type="button"
-                      onClick={() => handleSelect(loc)}
-                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
-                        isSelected
-                          ? "bg-primary/10 text-primary"
-                          : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                      }`}
-                    >
-                      <span className="truncate">{loc}</span>
-                      {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
+              {/* Location Dropdown Popover */}
+              {isOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-slate-200 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Select Your Location
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    {locations.map((loc) => {
+                      const isSelected = loc === activeLocation;
+                      return (
+                        <button
+                          key={loc}
+                          type="button"
+                          onClick={() => handleSelect(loc)}
+                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer text-left ${
+                            isSelected
+                              ? "bg-primary/10 text-primary"
+                              : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                          }`}
+                        >
+                          <span className="truncate">{loc}</span>
+                          {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          )
+        )}
       </div>
     </header>
   );

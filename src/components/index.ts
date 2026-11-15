@@ -47,5 +47,25 @@ export {
   type ConfirmModalProps,
   type ConfirmModalVariant,
 } from './ConfirmModal';
+export { Tooltip, type TooltipProps } from './Tooltip';
+export { RailButton, type RailButtonProps } from './RailButton';
+export {
+  Sidebar,
+  type SidebarProps,
+  type SidebarComponent,
+} from './Sidebar';
+export {
+  SidebarHeader,
+  type SidebarHeaderProps,
+} from './SidebarHeader';
+export {
+  SidebarItem,
+  type SidebarItemProps,
+  type SidebarMenuItem,
+} from './SidebarItem';
+export {
+  SidebarFooter,
+  type SidebarFooterProps,
+} from './SidebarFooter';
 
 
