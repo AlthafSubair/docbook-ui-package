@@ -5,6 +5,10 @@ export interface SelectIndicatorProps {
   isSelected?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
+  /** Whether to show the arrow mark when unselected. Defaults to true. */
+  showArrow?: boolean;
+  /** Alias for showArrow. */
+  showChevron?: boolean;
 }
 
 const sizeClasses = {
@@ -23,9 +27,16 @@ export const SelectIndicator: React.FC<SelectIndicatorProps> = ({
   isSelected = false,
   className = "",
   size = "md",
+  showArrow = true,
+  showChevron,
 }) => {
   const containerSize = sizeClasses[size] || sizeClasses.md;
   const iconSize = iconSizes[size] || iconSizes.md;
+  const hasArrow = (showArrow ?? showChevron) ?? true;
+
+  if (!isSelected && !hasArrow) {
+    return null;
+  }
 
   return (
     <div
